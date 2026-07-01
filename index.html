@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Don't Send It Yet</title>
+    <meta
+      name="description"
+      content="A regret-prevention tool for texts you might send to your ex."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar" aria-label="Site header">
+      <a class="brand" href="#" aria-label="Don't Send It Yet home">
+        <span class="brand-mark">DS</span>
+        <span>Don't Send It Yet</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#tool">Tool</a>
+        <a href="#vault">Vault</a>
+        <a href="#challenge">Challenge</a>
+        <a href="#emails">Emails</a>
+      </nav>
+      <button class="feedback-trigger" id="openFeedback" type="button">Feedback</button>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">For texts you might regret tomorrow</p>
+          <h1>Pause before you text your ex.</h1>
+          <p class="hero-text">
+            Paste the message, check the risk, and let the urge cool down before
+            your thumb makes a decision your nervous system is begging for.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#tool">Start the pause</a>
+            <a class="button ghost" href="#challenge">Try no-contact mode</a>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="Live regret score preview">
+          <div class="phone-shell">
+            <div class="phone-top"></div>
+            <div class="message incoming">Are you awake?</div>
+            <div class="message draft">I miss you. Can we talk?</div>
+            <div class="score-preview">
+              <span>Tomorrow-you regret score</span>
+              <strong>82</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="tool" class="tool-section">
+        <div class="section-heading">
+          <p class="eyebrow">60-second clarity check</p>
+          <h2>What were you about to send?</h2>
+        </div>
+
+        <div class="workspace">
+          <form class="tool" id="textForm">
+            <label for="draftText">Message draft</label>
+            <textarea
+              id="draftText"
+              name="draftText"
+              rows="8"
+              placeholder="Paste the text here before you send it..."
+              required
+            ></textarea>
+
+            <div class="field-grid">
+              <label>
+                Current urge
+                <select id="urgeType" name="urgeType">
+                  <option value="comfort">I want comfort</option>
+                  <option value="closure">I want closure</option>
+                  <option value="control">I want control</option>
+                  <option value="revenge">I want them to feel it</option>
+                  <option value="hope">I want another chance</option>
+                </select>
+              </label>
+
+              <label>
+                No-contact day
+                <input id="streakDay" name="streakDay" type="number" min="0" max="999" value="3" />
+              </label>
+            </div>
+
+            <label for="userEmail">Email for saving progress</label>
+            <input
+              id="userEmail"
+              name="userEmail"
+              type="email"
+              placeholder="Optional, but needed for challenge emails"
+            />
+
+            <button class="button primary wide" type="submit">Check the regret score</button>
+          </form>
+
+          <aside class="result" aria-live="polite">
+            <div class="meter">
+              <div>
+                <span class="meter-label">Regret Score</span>
+                <strong id="scoreValue">--</strong>
+              </div>
+              <div class="meter-ring" id="meterRing"></div>
+            </div>
+
+            <p class="diagnosis" id="diagnosis">
+              Your score will appear here after you paste the text.
+            </p>
+
+            <div class="risk-list" id="riskList"></div>
+
+            <div class="next-action" id="nextAction">
+              The next step will appear with your score.
+            </div>
+
+            <div class="cooldown" id="cooldownPanel" hidden>
+              <div class="timer" id="timer">10:00</div>
+              <p id="cooldownPrompt">
+                First question: what are you hoping they will say back?
+              </p>
+              <label for="reflectionText">One honest line before you choose</label>
+              <textarea
+                id="reflectionText"
+                rows="3"
+                placeholder="I want to send this because..."
+              ></textarea>
+              <div class="sound-panel" aria-label="Cooldown sound preview">
+                <div>
+                  <span class="meter-label">Sound</span>
+                  <p>Choose a background that helps the urge soften.</p>
+                </div>
+                <div class="sound-controls">
+                  <button class="sound-chip active" data-sound="off" type="button">Off</button>
+                  <button class="sound-chip" data-sound="rain" type="button">Rain</button>
+                  <button class="sound-chip" data-sound="brown" type="button">Brown noise</button>
+                  <button class="sound-chip" data-sound="breathing" type="button">Breathing tone</button>
+                </div>
+                <label for="soundVolume" class="volume-row">
+                  Volume
+                  <input id="soundVolume" type="range" min="0" max="100" value="32" />
+                </label>
+              </div>
+              <div class="cooldown-actions">
+                <button class="button ghost" id="nextPrompt" type="button">Next prompt</button>
+                <button class="button ghost" id="finishCooldown" type="button">I made it through</button>
+              </div>
+            </div>
+
+            <div class="decision-panel" id="decisionPanel" hidden>
+              <p class="decision-title">Choose where the message goes.</p>
+              <div class="cooldown-actions">
+                <button class="button calm" id="saveVault" type="button">Save to vault</button>
+                <button class="button danger" id="deleteDraft" type="button">Delete it</button>
+                <button class="button ghost" id="recordSent" type="button">I sent it</button>
+              </div>
+              <p class="decision-note" id="decisionNote"></p>
+            </div>
+
+            <button class="button primary wide" id="startCooldown" type="button" disabled>
+              Start 10-minute cooldown
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <section id="vault" class="vault-section">
+        <div class="section-heading compact">
+          <p class="eyebrow">Message vault</p>
+          <h2>Texts you did not send</h2>
+        </div>
+        <div class="vault-layout">
+          <div class="vault-stat">
+            <span>Protected messages</span>
+            <strong id="vaultCount">0</strong>
+          </div>
+          <div class="vault-list" id="vaultList">
+            <p class="empty-state">Saved drafts will appear here.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="challenge" class="challenge">
+        <div>
+          <p class="eyebrow">No-contact challenge</p>
+          <h2>Make not texting feel like progress.</h2>
+          <p>
+            Track the urge, protect your streak, and build a record that proves
+            you can survive the moment without reopening the wound.
+          </p>
+        </div>
+        <form class="email-form" id="emailForm">
+          <label for="email">Start the 30-day reset emails</label>
+          <div>
+            <input id="email" type="email" placeholder="you@example.com" required />
+            <button class="button primary" type="submit">Start</button>
+          </div>
+          <span id="emailStatus" role="status"></span>
+        </form>
+      </section>
+
+      <section class="checkin-section">
+        <div class="checkin-card">
+          <div>
+            <p class="eyebrow">Daily check-in</p>
+            <h2>Did you protect the streak today?</h2>
+            <p>
+              A streak is not about being perfect. It is a daily receipt that
+              you did not let panic make contact for you.
+            </p>
+          </div>
+          <form id="checkinForm" class="checkin-form">
+            <label for="checkinEmail">Email</label>
+            <input id="checkinEmail" type="email" placeholder="you@example.com" required />
+
+            <label for="urgeLevel">Urge level</label>
+            <input id="urgeLevel" type="range" min="0" max="10" value="5" />
+            <span class="range-readout" id="urgeReadout">5 / 10</span>
+
+            <label for="checkinNote">What triggered it?</label>
+            <textarea id="checkinNote" rows="3" placeholder="A song, a memory, a quiet hour..."></textarea>
+
+            <label class="checkbox-row">
+              <input id="protectedToday" type="checkbox" checked />
+              <span>I did not contact them today</span>
+            </label>
+
+            <button class="button primary wide" type="submit">Save check-in</button>
+            <span id="checkinStatus" role="status"></span>
+          </form>
+        </div>
+      </section>
+
+      <section id="emails" class="emails-section">
+        <div class="section-heading compact">
+          <p class="eyebrow">Email sequence</p>
+          <h2>The follow-up loop</h2>
+        </div>
+        <div class="email-timeline" id="emailTimeline">
+          <p class="empty-state">Start the challenge to see scheduled emails.</p>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal-backdrop" id="feedbackModal" hidden>
+      <form class="feedback-modal" id="feedbackForm" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Feedback</p>
+            <h2 id="feedbackTitle">Tell us what to improve.</h2>
+          </div>
+          <button class="icon-button" id="closeFeedback" type="button" aria-label="Close feedback">×</button>
+        </div>
+
+        <label for="feedbackEmail">Email</label>
+        <input id="feedbackEmail" type="email" placeholder="Optional" />
+
+        <label for="feedbackNote">Your thoughts</label>
+        <textarea
+          id="feedbackNote"
+          rows="6"
+          placeholder="What felt helpful, confusing, too much, or missing?"
+          required
+        ></textarea>
+
+        <button class="button primary wide" type="submit">Send feedback</button>
+        <span id="feedbackStatus" role="status"></span>
+      </form>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
