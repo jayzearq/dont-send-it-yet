@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">Don't Send It Yet social preview</title>
+  <desc id="desc">A calm preview card for a tool that helps people pause before texting an ex.</desc>
+  <rect width="1200" height="630" fill="#fbfaf7"/>
+  <rect x="80" y="78" width="1040" height="474" rx="28" fill="#ffffff" stroke="#dfe5e9" stroke-width="3"/>
+  <text x="128" y="168" fill="#b45163" font-family="Inter, Arial, sans-serif" font-size="28" font-weight="800">FOR TEXTS YOU MIGHT REGRET TOMORROW</text>
+  <text x="128" y="270" fill="#1d2329" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="800">Pause before</text>
+  <text x="128" y="360" fill="#1d2329" font-family="Inter, Arial, sans-serif" font-size="82" font-weight="800">you text your ex.</text>
+  <text x="128" y="442" fill="#66727f" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500">Check the regret score. Start a cooldown. Protect no-contact.</text>
+  <g transform="translate(802 122)">
+    <rect width="236" height="386" rx="36" fill="#182329"/>
+    <rect x="22" y="48" width="148" height="58" rx="22" fill="#eef5f1"/>
+    <rect x="66" y="132" width="148" height="58" rx="22" fill="#b45163"/>
+    <rect x="34" y="234" width="168" height="92" rx="18" fill="#ffffff"/>
+    <text x="56" y="270" fill="#66727f" font-family="Inter, Arial, sans-serif" font-size="18" font-weight="700">Regret score</text>
+    <text x="56" y="312" fill="#254b5c" font-family="Inter, Arial, sans-serif" font-size="54" font-weight="800">82</text>
+  </g>
+</svg>

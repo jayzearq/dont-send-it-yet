@@ -17,6 +17,8 @@ services:
         value: production
       - key: DATA_DIR
         value: /var/data
+      - key: SITE_URL
+        value: https://dont-send-it-yet.onrender.com
       - key: RESEND_API_KEY
         sync: false
       - key: FROM_EMAIL

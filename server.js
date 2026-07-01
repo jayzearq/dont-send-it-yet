@@ -131,6 +131,22 @@ function json(res, status, payload) {
   res.end(JSON.stringify(payload));
 }
 
+function text(res, status, body, contentType = "text/plain; charset=utf-8") {
+  res.writeHead(status, {
+    "Content-Type": contentType,
+    "Cache-Control": "public, max-age=3600",
+  });
+  res.end(body);
+}
+
+function getSiteUrl(req) {
+  const configuredUrl = String(process.env.SITE_URL || "").trim().replace(/\/+$/, "");
+  if (configuredUrl) return configuredUrl;
+
+  const protocol = req.headers["x-forwarded-proto"] || (req.socket.encrypted ? "https" : "http");
+  return `${protocol}://${req.headers.host}`.replace(/\/+$/, "");
+}
+
 function readBody(req) {
   return new Promise((resolve, reject) => {
     let body = "";
@@ -596,10 +612,13 @@ function serveStatic(req, res, pathname) {
       return;
     }
 
+    const extname = path.extname(filePath);
+    const body = extname === ".html" ? content.toString("utf8").replaceAll("{{SITE_URL}}", getSiteUrl(req)) : content;
+
     res.writeHead(200, {
-      "Content-Type": MIME_TYPES[path.extname(filePath)] || "application/octet-stream",
+      "Content-Type": MIME_TYPES[extname] || "application/octet-stream",
     });
-    res.end(content);
+    res.end(body);
   });
 }
 
@@ -609,6 +628,23 @@ const server = http.createServer(async (req, res) => {
   try {
     if (req.method === "GET" && url.pathname === "/healthz") {
       json(res, 200, { ok: true, service: "dont-send-it-yet" });
+      return;
+    }
+
+    if (req.method === "GET" && url.pathname === "/robots.txt") {
+      const siteUrl = getSiteUrl(req);
+      text(res, 200, `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`);
+      return;
+    }
+
+    if (req.method === "GET" && url.pathname === "/sitemap.xml") {
+      const siteUrl = getSiteUrl(req);
+      text(
+        res,
+        200,
+        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>${siteUrl}/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n</urlset>\n`,
+        "application/xml; charset=utf-8"
+      );
       return;
     }
 

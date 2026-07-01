@@ -33,6 +33,22 @@ RESEND_API_KEY=your_key FROM_EMAIL="Don't Send It Yet <hello@example.com>" npm r
 
 Runtime data is saved in `data/db.json`.
 
+## SEO Setup
+
+Set the public URL before production deploy so canonical links, Open Graph URLs,
+`robots.txt`, and `sitemap.xml` use the real domain:
+
+```bash
+SITE_URL=https://your-final-domain.com npm run dev
+```
+
+After launch:
+
+1. Submit `/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
+2. Inspect the homepage URL in Google Search Console.
+3. Validate structured data with Google's Rich Results Test.
+4. Follow the first-month rollout in `SEO_PROMOTION_PLAN.md`.
+
 ## Deploy
 
 This MVP is configured for Render using `render.yaml`.
