@@ -75,6 +75,8 @@ let soundNodes = [];
 let masterGain = null;
 let currentSound = "off";
 
+const visitorId = getVisitorId();
+
 function getLocal(key, fallback) {
   return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
 }
@@ -96,6 +98,31 @@ async function api(path, payload) {
   }
 
   return response.json();
+}
+
+function getVisitorId() {
+  const key = "dontSendVisitorId";
+  const existing = localStorage.getItem(key);
+  if (existing) return existing;
+
+  const next =
+    window.crypto?.randomUUID?.() ||
+    `visitor_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+  localStorage.setItem(key, next);
+  return next;
+}
+
+function track(type, extra = {}) {
+  const params = new URLSearchParams(window.location.search);
+  api("/api/event", {
+    type,
+    visitorId,
+    source: params.get("utm_source") || document.referrer || "direct",
+    medium: params.get("utm_medium") || "",
+    campaign: params.get("utm_campaign") || "",
+    path: window.location.pathname,
+    ...extra,
+  }).catch(() => null);
 }
 
 async function getState(email = "") {
@@ -268,6 +295,7 @@ function setActiveSound(sound) {
 function playSound(sound) {
   stopSound();
   setActiveSound(sound);
+  track("sound_selected", { medium: sound });
 
   if (sound === "off") return;
 
@@ -448,6 +476,7 @@ function showFeedbackModal() {
   feedbackModal.hidden = false;
   feedbackEmail.value = userEmail.value || emailInput.value || "";
   feedbackNote.focus();
+  track("feedback_opened");
 }
 
 function hideFeedbackModal() {
@@ -640,3 +669,12 @@ checkinForm.addEventListener("submit", async (event) => {
 });
 
 refreshState();
+track("page_view");
+
+document.querySelectorAll('a[href="#tool"]').forEach((link) => {
+  link.addEventListener("click", () => track("hero_cta_clicked"));
+});
+
+document.querySelectorAll('a[href="#challenge"]').forEach((link) => {
+  link.addEventListener("click", () => track("challenge_cta_clicked"));
+});

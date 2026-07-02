@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1500" viewBox="0 0 1000 1500">
+  <rect width="1000" height="1500" fill="#fbfaf7"/>
+  <rect x="64" y="72" width="872" height="1356" rx="28" fill="#ffffff" stroke="#dfe5e9" stroke-width="3"/>
+  <text x="112" y="180" fill="#b45163" font-family="Arial, sans-serif" font-size="34" font-weight="700">BEFORE YOU TEXT YOUR EX</text>
+  <text x="112" y="320" fill="#1d2329" font-family="Arial, sans-serif" font-size="86" font-weight="800">Don't</text>
+  <text x="112" y="420" fill="#1d2329" font-family="Arial, sans-serif" font-size="86" font-weight="800">Send It Yet</text>
+  <rect x="112" y="510" width="776" height="180" rx="18" fill="#fff7e9"/>
+  <text x="150" y="585" fill="#6f4b1f" font-family="Arial, sans-serif" font-size="38" font-weight="700">1. Paste the message</text>
+  <text x="150" y="642" fill="#6f4b1f" font-family="Arial, sans-serif" font-size="38" font-weight="700">2. Check the regret score</text>
+  <text x="150" y="699" fill="#6f4b1f" font-family="Arial, sans-serif" font-size="38" font-weight="700">3. Wait 10 minutes</text>
+  <rect x="112" y="790" width="776" height="250" rx="22" fill="#eef5f1"/>
+  <text x="150" y="880" fill="#254b5c" font-family="Arial, sans-serif" font-size="46" font-weight="800">Some texts deserve</text>
+  <text x="150" y="945" fill="#254b5c" font-family="Arial, sans-serif" font-size="46" font-weight="800">somewhere to go.</text>
+  <text x="150" y="1010" fill="#254b5c" font-family="Arial, sans-serif" font-size="46" font-weight="800">Just not their phone.</text>
+  <rect x="112" y="1130" width="776" height="110" rx="16" fill="#254b5c"/>
+  <text x="158" y="1200" fill="#ffffff" font-family="Arial, sans-serif" font-size="36" font-weight="800">dont-send-it-yet.onrender.com</text>
+  <text x="112" y="1332" fill="#66727f" font-family="Arial, sans-serif" font-size="30" font-weight="700">A free 10-minute pause tool for emotional texts.</text>
+</svg>

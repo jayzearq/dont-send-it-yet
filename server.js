@@ -282,6 +282,42 @@ function createEmailJob(db, email, day, subject, body, sendAt) {
   return job;
 }
 
+function summarizeStats(db) {
+  const events = db.events || [];
+  const since = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const recentEvents = events.filter((event) => new Date(event.createdAt).getTime() >= since);
+  const counts = {};
+  const daily = {};
+  const sources = {};
+
+  recentEvents.forEach((event) => {
+    counts[event.type] = (counts[event.type] || 0) + 1;
+    const day = String(event.createdAt || "").slice(0, 10);
+    if (day) {
+      daily[day] = daily[day] || {};
+      daily[day][event.type] = (daily[day][event.type] || 0) + 1;
+    }
+
+    if (event.type === "page_view") {
+      const source = event.source || "direct";
+      sources[source] = (sources[source] || 0) + 1;
+    }
+  });
+
+  const uniqueVisitors = new Set(
+    recentEvents.filter((event) => event.visitorId).map((event) => event.visitorId)
+  ).size;
+
+  return {
+    windowDays: 30,
+    generatedAt: new Date().toISOString(),
+    uniqueVisitors,
+    counts,
+    sources,
+    daily,
+  };
+}
+
 function scheduleChallenge(db, challenge) {
   const start = new Date(challenge.startDate);
   challengeTemplates.forEach((template) => {
@@ -573,6 +609,36 @@ async function handleApi(req, res, pathname) {
     });
   }
 
+  if (req.method === "POST" && pathname === "/api/event") {
+    const body = await readBody(req);
+    const type = String(body.type || "").trim();
+    const allowed = new Set([
+      "page_view",
+      "hero_cta_clicked",
+      "challenge_cta_clicked",
+      "feedback_opened",
+      "sound_selected",
+    ]);
+
+    if (!allowed.has(type)) {
+      return json(res, 400, { error: "Unsupported event type." });
+    }
+
+    const event = {
+      type,
+      visitorId: String(body.visitorId || "").slice(0, 80),
+      source: String(body.source || "direct").slice(0, 80),
+      medium: String(body.medium || "").slice(0, 80),
+      campaign: String(body.campaign || "").slice(0, 80),
+      path: String(body.path || "/").slice(0, 200),
+      createdAt: new Date().toISOString(),
+    };
+    db.events.push(event);
+    writeDb(db);
+
+    return json(res, 200, { ok: true });
+  }
+
   if (req.method === "GET" && pathname === "/api/state") {
     const url = new URL(req.url, `http://${req.headers.host}`);
     const email = cleanEmail(url.searchParams.get("email"));
@@ -589,6 +655,10 @@ async function handleApi(req, res, pathname) {
   if (req.method === "GET" && pathname === "/api/outbox") {
     writeDb(db);
     return json(res, 200, { outbox: db.outbox.slice(-50) });
+  }
+
+  if (req.method === "GET" && pathname === "/api/stats") {
+    return json(res, 200, summarizeStats(db));
   }
 
   writeDb(db);
