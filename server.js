@@ -736,12 +736,16 @@ async function handleApi(req, res, pathname) {
 
 function serveStatic(req, res, pathname) {
   const safePath = pathname === "/" ? "/index.html" : pathname;
-  const filePath = path.normalize(path.join(ROOT, safePath));
+  let filePath = path.normalize(path.join(ROOT, safePath));
 
   if (!filePath.startsWith(ROOT)) {
     res.writeHead(403);
     res.end("Forbidden");
     return;
+  }
+
+  if (pathname.endsWith("/")) {
+    filePath = path.join(filePath, "index.html");
   }
 
   fs.readFile(filePath, (error, content) => {
@@ -778,10 +782,22 @@ const server = http.createServer(async (req, res) => {
 
     if (req.method === "GET" && url.pathname === "/sitemap.xml") {
       const siteUrl = getSiteUrl(req);
+      const pages = [
+        { path: "/", priority: "1.0" },
+        { path: "/should-i-text-my-ex/", priority: "0.8" },
+        { path: "/no-contact-challenge/", priority: "0.8" },
+        { path: "/unsent-texts/", priority: "0.8" },
+      ];
+      const urls = pages
+        .map(
+          (page) =>
+            `  <url>\n    <loc>${siteUrl}${page.path}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>${page.priority}</priority>\n  </url>`
+        )
+        .join("\n");
       text(
         res,
         200,
-        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url>\n    <loc>${siteUrl}/</loc>\n    <changefreq>weekly</changefreq>\n    <priority>1.0</priority>\n  </url>\n</urlset>\n`,
+        `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
         "application/xml; charset=utf-8"
       );
       return;
