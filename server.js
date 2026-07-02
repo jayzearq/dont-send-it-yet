@@ -744,7 +744,7 @@ function serveStatic(req, res, pathname) {
     return;
   }
 
-  if (pathname.endsWith("/")) {
+  if (pathname !== "/" && pathname.endsWith("/")) {
     filePath = path.join(filePath, "index.html");
   }
 
