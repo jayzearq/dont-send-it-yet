@@ -601,6 +601,42 @@ input:focus {
   line-height: 1.05;
 }
 
+.modal-copy {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.site-footer {
+  align-items: center;
+  background: var(--white);
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  display: flex;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 14px;
+  justify-content: center;
+  padding: 20px;
+}
+
+.footer-link {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-link:hover {
+  color: var(--ink);
+}
+
 .vault-section {
   background: #edf4f0;
 }

@@ -353,6 +353,11 @@
       </section>
     </main>
 
+    <footer class="site-footer">
+      <span>Don't Send It Yet</span>
+      <button class="footer-link" id="openPrivacy" type="button">Privacy</button>
+    </footer>
+
     <div class="modal-backdrop" id="feedbackModal" hidden>
       <form class="feedback-modal" id="feedbackForm" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
         <div class="modal-head">
@@ -377,6 +382,21 @@
         <button class="button primary wide" type="submit">Send feedback</button>
         <span id="feedbackStatus" role="status"></span>
       </form>
+    </div>
+
+    <div class="modal-backdrop" id="privacyModal" hidden>
+      <div class="feedback-modal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Privacy</p>
+            <h2 id="privacyTitle">How this tool uses inputs.</h2>
+          </div>
+          <button class="icon-button" id="closePrivacy" type="button" aria-label="Close privacy">×</button>
+        </div>
+        <p class="modal-copy">
+          Drafts, vault saves, check-ins, and feedback may be stored to improve the product and understand what helps people pause before sending. Avoid pasting anything you do not want stored.
+        </p>
+      </div>
     </div>
 
     <script src="script.js"></script>

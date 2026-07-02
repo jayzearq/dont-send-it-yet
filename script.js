@@ -29,6 +29,9 @@ const closeFeedback = document.querySelector("#closeFeedback");
 const feedbackEmail = document.querySelector("#feedbackEmail");
 const feedbackNote = document.querySelector("#feedbackNote");
 const feedbackStatus = document.querySelector("#feedbackStatus");
+const privacyModal = document.querySelector("#privacyModal");
+const openPrivacy = document.querySelector("#openPrivacy");
+const closePrivacy = document.querySelector("#closePrivacy");
 const vaultCount = document.querySelector("#vaultCount");
 const vaultList = document.querySelector("#vaultList");
 const emailForm = document.querySelector("#emailForm");
@@ -484,6 +487,14 @@ function hideFeedbackModal() {
   feedbackStatus.textContent = "";
 }
 
+function showPrivacyModal() {
+  privacyModal.hidden = false;
+}
+
+function hidePrivacyModal() {
+  privacyModal.hidden = true;
+}
+
 function resetScoreAfterDecision() {
   scoreValue.textContent = "--";
   meterRing.style.setProperty("--score", 0);
@@ -606,6 +617,14 @@ closeFeedback.addEventListener("click", hideFeedbackModal);
 feedbackModal.addEventListener("click", (event) => {
   if (event.target === feedbackModal) {
     hideFeedbackModal();
+  }
+});
+
+openPrivacy.addEventListener("click", showPrivacyModal);
+closePrivacy.addEventListener("click", hidePrivacyModal);
+privacyModal.addEventListener("click", (event) => {
+  if (event.target === privacyModal) {
+    hidePrivacyModal();
   }
 });
 

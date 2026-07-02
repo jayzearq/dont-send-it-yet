@@ -318,6 +318,70 @@ function summarizeStats(db) {
   };
 }
 
+function requireAdmin(req, res) {
+  const token = String(process.env.ADMIN_TOKEN || "").trim();
+  const header = String(req.headers.authorization || "");
+
+  if (!token) {
+    json(res, 503, { error: "Admin input export is disabled. Set ADMIN_TOKEN to enable it." });
+    return false;
+  }
+
+  if (header !== `Bearer ${token}`) {
+    json(res, 401, { error: "Unauthorized." });
+    return false;
+  }
+
+  return true;
+}
+
+function getAdminInputs(db) {
+  return {
+    generatedAt: new Date().toISOString(),
+    sessions: (db.sessions || []).slice(-200).map((item) => ({
+      id: item.id,
+      email: item.email,
+      draft: item.draft,
+      urge: item.urge,
+      streakDay: item.streakDay,
+      score: item.score,
+      status: item.status,
+      reflection: item.reflection,
+      createdAt: item.createdAt,
+      completedAt: item.completedAt,
+    })),
+    vault: (db.vault || []).slice(0, 200).map((item) => ({
+      id: item.id,
+      email: item.email,
+      sessionId: item.sessionId,
+      text: item.text,
+      score: item.score,
+      urge: item.urge,
+      reflection: item.reflection,
+      createdAt: item.createdAt,
+    })),
+    checkins: (db.checkins || []).slice(-200).map((item) => ({
+      id: item.id,
+      email: item.email,
+      challengeId: item.challengeId,
+      urgeLevel: item.urgeLevel,
+      protectedToday: item.protectedToday,
+      note: item.note,
+      createdAt: item.createdAt,
+    })),
+    feedback: (db.feedback || []).slice(-200).map((item) => ({
+      id: item.id,
+      sessionId: item.sessionId,
+      email: item.email,
+      outcome: item.outcome,
+      hardPart: item.hardPart,
+      supportNeed: item.supportNeed,
+      note: item.note,
+      createdAt: item.createdAt,
+    })),
+  };
+}
+
 function scheduleChallenge(db, challenge) {
   const start = new Date(challenge.startDate);
   challengeTemplates.forEach((template) => {
@@ -659,6 +723,11 @@ async function handleApi(req, res, pathname) {
 
   if (req.method === "GET" && pathname === "/api/stats") {
     return json(res, 200, summarizeStats(db));
+  }
+
+  if (req.method === "GET" && pathname === "/api/admin/inputs") {
+    if (!requireAdmin(req, res)) return;
+    return json(res, 200, getAdminInputs(db));
   }
 
   writeDb(db);

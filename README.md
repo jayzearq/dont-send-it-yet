@@ -33,6 +33,23 @@ RESEND_API_KEY=your_key FROM_EMAIL="Don't Send It Yet <hello@example.com>" npm r
 
 Runtime data is saved in `data/db.json`.
 
+## Admin Input Export
+
+User drafts and notes are sensitive. The admin export endpoint is disabled unless `ADMIN_TOKEN` is set.
+
+```bash
+ADMIN_TOKEN=replace_me node server.js
+```
+
+Then fetch recent stored inputs:
+
+```bash
+curl -H "Authorization: Bearer replace_me" \
+  https://dont-send-it-yet.onrender.com/api/admin/inputs
+```
+
+The export includes recent score drafts, vault saves, check-in notes, and feedback notes.
+
 ## SEO Setup
 
 Set the public URL before production deploy so canonical links, Open Graph URLs,
