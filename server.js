@@ -765,6 +765,11 @@ function serveStatic(req, res, pathname) {
   });
 }
 
+function redirect(res, location) {
+  res.writeHead(301, { Location: location });
+  res.end();
+}
+
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
 
@@ -805,6 +810,16 @@ const server = http.createServer(async (req, res) => {
 
     if (url.pathname.startsWith("/api/")) {
       await handleApi(req, res, url.pathname);
+      return;
+    }
+
+    const trailingSlashRoutes = new Set([
+      "/should-i-text-my-ex",
+      "/no-contact-challenge",
+      "/unsent-texts",
+    ]);
+    if (trailingSlashRoutes.has(url.pathname)) {
+      redirect(res, `${url.pathname}/${url.search}`);
       return;
     }
 
