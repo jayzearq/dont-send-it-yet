@@ -792,6 +792,10 @@ const server = http.createServer(async (req, res) => {
         { path: "/should-i-text-my-ex/", priority: "0.8" },
         { path: "/no-contact-challenge/", priority: "0.8" },
         { path: "/unsent-texts/", priority: "0.8" },
+        { path: "/drunk-texting-ex/", priority: "0.7" },
+        { path: "/closure-text-to-ex/", priority: "0.7" },
+        { path: "/text-ex-at-night/", priority: "0.7" },
+        { path: "/breakup-urge-timer/", priority: "0.7" },
       ];
       const urls = pages
         .map(
@@ -817,6 +821,10 @@ const server = http.createServer(async (req, res) => {
       "/should-i-text-my-ex",
       "/no-contact-challenge",
       "/unsent-texts",
+      "/drunk-texting-ex",
+      "/closure-text-to-ex",
+      "/text-ex-at-night",
+      "/breakup-urge-timer",
     ]);
     if (trailingSlashRoutes.has(url.pathname)) {
       redirect(res, `${url.pathname}/${url.search}`);
